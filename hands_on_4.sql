@@ -1,34 +1,48 @@
-CREATE INDEX idx_students_email
-ON students(email);
-
-CREATE INDEX idx_courses_code
-ON courses(course_code);
-
-CREATE INDEX idx_students_department
-ON students(department_id);
-
 EXPLAIN
-SELECT *
-FROM students
-WHERE email = 'arun@gmail.com';
+SELECT s.first_name,
+s.last_name,
+c.course_name
+FROM enrollments e
+JOIN students s
+ON s.student_id = e.student_id
+JOIN courses c
+ON c.course_id = e.course_id
+WHERE s.enrollment_year = 2022;
 
-EXPLAIN
-SELECT *
-FROM courses
-WHERE course_code = 'CS301';
+CREATE INDEX idx_students_enrollment_year
+ON students(enrollment_year);
 
-CREATE INDEX idx_enrollment_student_course
+
+CREATE UNIQUE INDEX idx_enrollment_student_course
 ON enrollments(student_id, course_id);
 
-EXPLAIN
-SELECT department_id,
-       COUNT(*)
-FROM students
-GROUP BY department_id;
+
+CREATE INDEX idx_courses_course_code
+ON courses(course_code);
 
 EXPLAIN
 SELECT s.first_name,
-       d.dept_name
-FROM students s
-JOIN departments d
-ON s.department_id = d.department_id;
+s.last_name,
+c.course_name
+FROM enrollments e
+JOIN students s
+ON s.student_id = e.student_id
+JOIN courses c
+ON c.course_id = e.course_id
+WHERE s.enrollment_year = 2022;
+
+
+CREATE INDEX idx_pending_grades
+ON enrollments(student_id);
+
+
+SELECT e.enrollment_id,
+s.first_name,
+s.last_name,
+c.course_name
+FROM enrollments e
+JOIN students s
+ON e.student_id=s.student_id
+JOIN courses c
+ON e.course_id=c.course_id;
+
